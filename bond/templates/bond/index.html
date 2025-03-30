@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load bond_tags %}
+{% load static %}
+
+{% block title %}
+Скринер облигаций
+{% endblock %}
+
+{% block addstatic %}
+	<link rel="stylesheet" href="{% static 'css/index-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+	<div class="page">
+		<div class="px-4 py-5 text-center">
+			<img class="d-block mx-auto mb-4" src="{% static 'images/awsome_hedgehog.png' %}" alt="" width="144" >
+			<h1 class="display-5 fw-bold text-body-emphasis">Поиск облигаций</h1>
+			<div class="col-lg-6 mx-auto">
+				<p class="lead mb-4">Hedhehog-Finance - сервис по подбору и анализу облигаций.</p>
+				<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+					{% comment %}
+					<a type="button" class="btn btn-primary btn-lg px-4 gap-3" href="{% url 'bond_screener' %}">Попробовать</a>
+					{% endcomment %}
+					<a type="button" class="btn btn-outline-success btn-lg px-4 gap-3" href="{% url 'bond_screener' %}">Попробовать</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% comment %}
+	<div class="intro">
+		<div class="intro-inner">
+			<div class="intro-text-left">
+				<h1 class="intro-title">
+					Инвестрируйте в облигации!
+				</h1>
+
+				<p class="intro-subtitle">совместно с Hedgehog-Finance.ru</p>
+
+				<p class="intro-text">
+					<strong>Hedgehog-Finance.ru</strong> - сервис для поиска облигаций, оценки долговой нагрузки эмитентов и контроля рисков для начинающих и профессиональных инветсоров.
+				</p>
+
+				<button class="intro-button">
+					Попробовать сейчас
+				</button>
+			</div>
+
+			<div class="intro-text-right">
+				<img src="{% static 'images/awsome_hedgehog.png' %}" width="300">
+			</div>
+		</div>
+	</div>
+	{% endcomment %}
+
+
+{% endblock %}

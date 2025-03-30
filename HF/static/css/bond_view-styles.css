@@ -1,0 +1,375 @@
+.bond-header {
+    padding: 40px 40px;
+    width: 100%;
+    background: #F8F8F8;
+}
+
+.bond-isin {
+    width: 100%;
+    color: #A9A9A9;
+}
+
+.bond-header::after {
+    content: "";
+
+    width: 100%;
+    height: 1px;
+    margin-top: 20px;
+    float: right;
+    background-color: #d9d9d9;
+}
+
+.bond-header-item::before {
+    content: "";
+
+    width: 2px;
+    height: 100%;
+    float: right;
+
+    background-color: black;
+}
+
+.bond-main {
+    background: #F8F8F8;
+
+}
+
+.btn-msfo {
+    text-align: center;
+
+}
+
+.block-header {
+    color: black;
+}
+
+.bond-about {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+
+    border-radius: 20px;
+}
+
+.bond-about-release-left {
+    padding-right: 10%;
+
+}
+
+.bond-about-release-right {
+    padding-left: 10%;
+
+}
+
+
+
+
+/* CSS */
+.button-23 {
+  background-color: #FFFFFF;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 15px;
+  margin: 0;
+  outline: none;
+  padding: 13px 23px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+.button-23:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow .2s;
+}
+
+.button-23:active {
+  background-color: #F7F7F7;
+  border-color: #000000;
+  transform: scale(.96);
+}
+
+.button-23:disabled {
+  border-color: #DDDDDD;
+  color: #DDDDDD;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.bond-about-header {
+    padding-bottom: 5%;
+    font-weight: bold;
+    color: black;
+}
+
+.bond-about-header::after {
+    content: "";
+
+    width: 100%;
+    height: 2px;
+    margin-top: 5px;
+    float: right;
+    background-color: black;
+}
+
+.bond-about-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.emitter-about {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+
+    border-radius: 20px;
+}
+
+.emitter-about-item {
+    font-size: 12px;
+}
+
+.debt-rating {
+    margin-top: 20px;
+}
+
+.emitter-description {
+    padding-top: 30px;
+}
+
+.debt-rating-item {
+    text-align: center;
+}
+
+.debt-rating-item-last {
+    text-align: center;
+}
+
+.debt-rating-item::before {
+    content: "";
+
+    width: 2px;
+    height: 100%;
+    margin-right: 30px;
+    float: left;
+
+    background-color: gray;
+}
+
+.debt-rating-item-first::after {
+    content: "";
+
+    width: 2px;
+    height: 100%;
+    margin-right: 30px;
+    margin-top: -18%;
+    float: left;
+
+    background-color: gray;
+}
+
+.debt-agent {
+    color: #b3b3b3;
+}
+.payments-list {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+
+    border-radius: 20px;
+}
+
+.past-date {
+    background: #B4E197;
+}
+
+.revenue-income {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+    border-radius: 20px;
+}
+
+.revenue-chart {
+    margin: 40px 0;
+}
+
+.margin-data {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+
+    border-radius: 20px;
+}
+
+.finance-health {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+
+    border-radius: 20px;
+}
+
+#amchartdiv1 {
+    width: 100%;
+    height: 300px;
+}
+
+#amchartdiv2 {
+    width: 100%;
+    height: 300px;
+}
+
+
+.liquidity {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+
+    border-radius: 20px;
+}
+
+.transparency {
+    margin: 20px 0;
+    padding: 2% 5%;
+    background: #FFFFFF;
+
+    border-radius: 20px;
+}
+
+#amchartdiv3 {
+    width: 100%;
+    height: 500px;
+    margin-top: 30px;
+}
+
+.first {
+    margin-top: 10px;
+}
+
+.last {
+    margin-bottom: 45px
+}
+
+.comment {
+
+    width: 100%;
+    font-size: 1.3rem;
+    line-height: 1.2;
+
+
+}
+
+.comment-text {
+    padding-left: 3.5%;
+
+    width: 110%;
+
+}
+
+.comment-success::before {
+    font-family: "bootstrap-icons";
+    content: "\F26B";
+    width: 3.5%;
+    font-size: 1.7rem;
+    margin-top: 15px;
+    line-height: normal;
+    margin-left: -100%;
+
+
+    color: green;
+}
+
+.comment-warning::before {
+    font-family: "bootstrap-icons";
+    content: "\F337";
+    width: 3.5%;
+    margin-top: 15px;
+    font-size: 1.7rem;
+
+    margin-left: -100%;
+    line-height: normal;
+
+
+    color: orange;
+}
+
+.comment-danger::before {
+    font-family: "bootstrap-icons";
+    content: "\F627";
+    width: 3.5%;
+    font-size: 1.7rem;
+    margin-top: 15px;
+    line-height: normal;
+    margin-left: -100%;
+
+
+    color: red;
+}
+
+.small-comment {
+
+    width: 100%;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.icon {
+    width: 3.5%;
+    float: left;
+}
+
+.comment-text {
+    width: 90%;
+    float: left;
+    position: relative;
+}
+
+
+.danger {
+    color: red;
+
+}
+
+.warning {
+    color: orange;
+
+}
+
+.success {
+    color: green;
+
+}
+
+.comment-icon {
+    font-size: 1.5rem;
+}
+
+.small-comment-icon {
+    font-size: 1.4rem;
+}
+
+.list-group {
+    font-size: 20px;
+    border-radius: 20px;
+
+}
+
+
+.list-group-item {
+    color: gray;
+    bold: 700;
+}

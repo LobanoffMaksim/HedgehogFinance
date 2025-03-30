@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+
+{% load bond_tags %}
+{% load text_tags %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+Скринер облигаций
+{% endblock %}
+
+{% block addstatic %}
+    <link rel="stylesheet" href="{% static 'css/bond_screener-styles.css' %}">
+
+    <link rel="stylesheet" href="{% static 'js/bond_screener.js' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main">
+
+    <form id="main_form" action="{% url 'bond_screener' %}">
+        {% csrf_token %}
+        <div class="main-item">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        {{ form.d_before_end_min.errors }}
+                        {{ form.d_before_end_max.errors }}
+                        <div class="form-group row">
+                            <label  class="col-sm-4 col-form-label" >
+                                Срок, дней &nbsp
+                                <i class="col-form-label bi bi-question-octagon" data-toggle="tooltip" data-placement="top" title="{% get_tooltip_text 0 %}"></i>
+                            </label>
+
+                            <div class="col-sm-3">
+                                {% if is_form_default == False %}
+                                    <input value='{{ form.cleaned_data.d_before_end_min|stringformat:".0f" }}' name="d_before_end_min" class="form-control" placeholder="от">
+                                {% else %}
+                                    <input value='20' name="d_before_end_min" class="form-control" placeholder="от">
+                                {% endif %}
+                            </div>
+
+                            <div class="col-sm-3">
+                                {% if form.cleaned_data.d_before_end_max is not None %}
+                                    <input value='{{ form.cleaned_data.d_before_end_max }}' name="d_before_end_max" class="form-control" placeholder="до">
+                                {% else %}
+                                    <input name="d_before_end_max" class="form-control" placeholder="до">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.mat_yield_min.errors }}
+                        {{ form.mat_yield_max.errors }}
+                        <div class="form-group row">
+                            <label  class="col-sm-4 col-form-label">
+                                Доходность &nbsp
+                                <i class="col-form-label bi bi-question-octagon" data-toggle="tooltip" data-placement="top" title="{% get_tooltip_text 1 %}"></i>
+
+                            </label>
+
+                            <div class="col-sm-3">
+                                {% if form.cleaned_data.mat_yield_min is not None %}
+                                    <input value='{{ form.cleaned_data.mat_yield_min|stringformat:".2f" }}' name="mat_yield_min" class="form-control" placeholder="от, %">
+                                {% else %}
+                                    <input name="mat_yield_min" class="form-control" placeholder="от">
+                                {% endif %}
+                            </div>
+
+                            <div class="col-sm-3">
+                                {% if form.cleaned_data.mat_yield_max is not None %}
+                                    <input value='{{ form.cleaned_data.mat_yield_max|stringformat:".2f" }}' name="mat_yield_max" class="form-control" placeholder="от, %">
+                                {% else %}
+                                    <input name="mat_yield_max" class="form-control" placeholder="до, %">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form.coupon_size_min.errors }}
+                        {{ form.coupon_size_max.errors }}
+                        <div class="form-group row">
+                            <label  class="col-form-label col-sm-4 col-form-label" >
+                                Купон &nbsp
+                                <i class="col-form-label bi bi-question-octagon" data-toggle="tooltip" data-placement="top" title="{% get_tooltip_text 2 %}"></i>
+                            </label>
+
+                            <div class="col-sm-3">
+                                {% if is_form_default == False %}
+                                    <input value='{{ form.cleaned_data.coupon_size_min|stringformat:".2f" }}' name="coupon_size_min" class="form-control" placeholder="от">
+                                {% else %}
+                                    <input value='1' name="coupon_size_min" class="form-control" placeholder="от">
+                                {% endif %}
+                            </div>
+
+                            <div class="col-sm-3">
+                                {% if form.cleaned_data.coupon_size_max is not None %}
+                                    <input value='{{ form.cleaned_data.coupon_size_max|stringformat:".2f" }}' name="coupon_size_max" class="form-control" placeholder="до">
+                                {% else %}
+                                    <input name="coupon_size_max" class="form-control" placeholder="до, ₽">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.price_min.errors }}
+                        {{ form.price_max.errors }}
+                        <div class="form-group row">
+                            <label  class="col-sm-4 col-form-label">
+                                Цена &nbsp
+                                <i class="col-form-label bi bi-question-octagon" data-toggle="tooltip" data-placement="top" title="{% get_tooltip_text 3 %}"></i>
+
+                            </label>
+                            <div class="col-sm-3">
+                                {% if is_form_default == False  %}
+                                    <input value='{{ form.cleaned_data.price_min|stringformat:".2f" }}' name="price_min" class="form-control" placeholder="от">
+                                {% else %}
+                                    <input value='70.00' name="price_min" class="form-control" placeholder="от">
+                                {% endif %}
+                            </div>
+
+                            <div class="col-sm-3">
+                                {% if form.cleaned_data.price_max is not None %}
+                                    <input value='{{ form.cleaned_data.price_max|stringformat:".2f" }}' name="price_max" class="form-control" placeholder="до">
+                                {% else %}
+                                    <input name="price_max" class="form-control" placeholder="до, %">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form.credit_level_min.errors }}
+
+                        <div class="form-group row">
+
+                            <label  class="col-sm-3 ">
+                                Кредитный рейтинг
+
+                            </label>
+                            <i class="col-form-label col-sm-1 bi bi-question-octagon" data-toggle="tooltip" data-placement="top" title="{% get_tooltip_text 4 %}"></i>
+
+                            <div class="text-center col-sm-3">
+                                <select name="credit_level_min" id="id_credit_level_min" class="form-control">
+                                    <option value="{{ form.cleaned_data.credit_level_min }}" selected>{{ form.cleaned_data.credit_level_min }} </option>
+                                    <option value="Не важен">Не важен</option>
+                                    <option value="B-">B-</option>
+                                    <option value="B">B</option>
+                                    <option value="B+">B+</option>
+                                    <option value="BB">BB</option>
+                                    <option value="BB+">BB+</option>
+                                    <option value="BBB-">BBB-</option>
+                                    <option value="BBB">BBB</option>
+                                    <option value="BBB+">BBB+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="A">A</option>
+                                    <option value="A+">A+</option>
+                                    <option value="AA-">AA-</option>
+                                    <option value="AA">AA</option>
+                                    <option value="AA+">AA+</option>
+                                    <option value="AAA">AAA</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.liquidity_min.errors }}
+                        <div class="form-group row">
+                            <label  class="col-sm-4 col-form-label">
+                                Ликвидность &nbsp
+                                <i class="col-form-label col-sm-1 bi bi-question-octagon" data-toggle="tooltip" data-placement="top" title="{% get_tooltip_text 5 %}"></i>
+
+                            </label>
+                            <div class="col-sm-3">
+                                {% if is_form_default == False %}
+                                    <input value='{{ form.cleaned_data.liquidity_min|stringformat:".2f" }}' name="liquidity_min" class="form-control" placeholder="от, млн. руб">
+                                {% else %}
+                                    <input value='1.00' name="liquidity_min" class="form-control" placeholder="от, млн. руб">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <br>
+            <div class="container">
+                {{ form.search_title.errors }}
+                {% if form.search_title is not None %}
+                    <input value='{{ form.cleaned_data.search_title }}' name="search_title" class="form-control me-2" type="search" placeholder="Поиск облигаций по названию" aria-label="Search">
+
+                {% else %}
+                    <input name="search_title" class="form-control me-2" type="search" placeholder="Поиск облигаций по названию" aria-label="Search">
+
+                {% endif %}
+                <br>
+            </div>
+            <div class="button-container">
+                <button class="btn btn-outline-success" type="submit" formmethod="post">Искать</button>
+            </div>
+
+        </div>
+        <div class="main-item">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="align-middle">Название</th>
+                            <th scope="col" class=" align-middle text-center">Доходность</th>
+                            <th scope="col" class="pc-only align-middle text-center">Срок, дней</th>
+                            <th scope="col" class="pc-only align-middle text-center">
+                                <span>Ликвидность</span>
+                                <br>
+                                млн. руб
+                            </th>
+                            <th scope="col" class="pc-only align-middle text-center">
+                                <span>Кредитный</span>
+                                <br>
+                                рейтинг</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bond in bonds %}
+                            <tr class="line">
+                                <td>
+                                    <div>
+                                        <a target="_blank" class="item-link" style="" href="{% url 'bond' bond.isin %}">
+                                            {{ bond.title }}
+                                        </a>
+                                        {% if bond.is_for_qualified_investors %}
+                                            &nbsp
+                                            <i class="col-form-label col-sm-1 bi bi-bank" style="color: #43A114;" data-toggle="tooltip" data-placement="top" title="{% get_tooltip_text 6 %}"></i>
+                                        {% endif %}
+                                    </div>
+
+
+                                </td>
+                                <td class="text-center">{{ bond.yield_to_maturity }}%</td>
+                                <td class="pc-only text-center">{% get_time bond %}</td>
+                                <td class="pc-only text-center">
+                                    <div class="cr-item-2 {% get_liquidity_color bond %}">
+                                        {% get_liquidity_size bond %}
+                                    </div>
+                                </td>
+                                <td class="pc-only text-center">
+                                    <div class="cr-item-1 {% get_line_color bond %} ">
+                                        {% get_credit_rating_value bond %}
+                                    </div>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="pag">
+            <ul class="pagination">
+                {% if bonds.has_previous %}
+                    <li class="page-item">
+                        <button class="page-link" name="page" value="{{ bonds.previous_page_number }}" type="submit" formmethod="post" aria-label="Previous">
+                            &laquo;
+                        </button>
+                    </li>
+                    <button class="page-link" name="page" value="{{ bonds.previous_page_number }}" type="submit" formmethod="post" aria-label="Previous">
+                            {{ bonds.previous_page_number }}
+                    </button>
+                {% endif %}
+
+                <button class="page-link active" name="page" value="{{ bonds.number }}" type="submit" formmethod="post" aria-label="Previous">
+                    {{ bonds.number }}
+                </button>
+
+                {% if bonds.has_next %}
+                    <button class="page-link" name="page" value="{{ bonds.next_page_number }}" type="submit" formmethod="post" aria-label="Previous">
+                        {{ bonds.next_page_number }}
+                    </button>
+                    <li class="page-item">
+                        <button class="page-link" name="page" id="page" value="{{ bonds.next_page_number }}" formmethod="post">
+                            &raquo;
+                        </button>
+                    </li>
+
+                {% endif %}
+            </ul>
+        </div>
+        </div>
+
+
+
+    </form>
+
+
+
+    <style>
+        .errorlist {color: red;}
+    </style>
+
+    <script>
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+        let form = document.getElementById('main_form');
+        let button = document.getElementById('reset-button');
+
+        button.addEventListener('click', () => form.reset());
+        var win_wigth = window.screen.width;
+
+
+        if (win_wigth < 900) {
+            const collection = document.getElementsByClassName("pc-only");
+
+            while(collection.length) {
+                collection[0].remove();
+            }
+        }
+    </script>
+
+
+</div>
+{% endblock %}

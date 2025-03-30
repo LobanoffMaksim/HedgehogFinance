@@ -1,0 +1,23 @@
+<div class="comment comment-{{ comment_data.0 }} {{ comment_type }}">
+
+    {% comment %}
+    {% if comment_data.0 == 'success' %}
+        <i class="bi comment-icon bi-check-circle {{ comment_data.0 }}"></i>
+    {% elif comment_data.0 == 'danger' %}
+        <i class="bi comment-icon bi-x-circle {{ comment_data.0 }}"></i>
+    {% else %}
+        <i class="bi comment-icon bi-exclamation-octagon {{ comment_data.0 }}"></i>
+    {% endif %}
+
+    {% endcomment %}
+
+    <div class="comment-text w-100">
+        <span class={{ comment_data.0 }}>{{ comment_data.1 }}</span>
+        {{ comment_data.2 }}
+    </div>
+
+
+
+
+
+</div>

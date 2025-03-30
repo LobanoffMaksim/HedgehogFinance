@@ -1,0 +1,30 @@
+<div class="main-item">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="{% url 'portfolio-main' portfolio.id %}">{{ portfolio.title }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'portfolio-main' portfolio.id %}">Главная</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'portfolio-cash' portfolio.id %}">Кэш</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'portfolio-bond' portfolio.id %}">Облигации</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'portfolio-etf' portfolio.id %}">ETF</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'portfolio-create-asset' portfolio.id %}">Создать актив</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'portfolio-create-transaction' portfolio.id %}">Создать транзакцию</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

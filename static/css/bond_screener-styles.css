@@ -1,0 +1,23 @@
+.main {
+    padding: 5% 10%;
+}
+
+.item-link {
+    text-decoration: none;
+    color: black;
+}
+
+.table {
+    margin-top: 30px;
+}
+
+.cr-item {
+    padding: 2% 5%;
+    margin: 0 0;
+    background: red;
+    border-radius: 10%px;
+}
+
+.pag {
+    margin: 30% 30%;
+}

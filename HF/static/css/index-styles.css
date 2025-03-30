@@ -1,0 +1,22 @@
+.navbar {
+    background: #FFFFFF;
+}
+
+.page {
+    background: #F0F8F0;
+    height: 100vh;
+}
+
+.btn-outline-success {
+  --bs-btn-font-weight: 400;
+  --bs-btn-color: rgb(60,170,60);
+  --bs-btn-bg: white;
+  --bs-btn-border-color: rgb(60,170,60);
+  --bs-btn-hover-color: white;
+  --bs-btn-hover-bg: rgba(60,170,60, 0.6);
+  --bs-btn-hover-border-color: rgb(60,170,60);
+  --bs-btn-focus-shadow-rgb: rgba(60,170,60, 0.6);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgba(60,170,60, 0.6);
+  --bs-btn-active-border-color: rgb(60,170,60);
+}

@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% load bond_tags %}
+{% load static %}
+
+{% block title %}
+Скринер облигаций
+{% endblock %}
+
+{% block addstatic %}
+    <link rel="stylesheet" href="{% static 'css/bond_screener-styles.css' %}">
+
+    <link rel="stylesheet" href="{% static 'js/bond_screener.js' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <form id="main_form">
+
+        <div class="main-item">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label  class="col-sm-4 col-form-label">Срок, дней</label>
+                        <div class="col-sm-3">
+                            {% if form_data.d_before_end_min != -1 %}
+                                <input value='{{ form_data.d_before_end_min }}' name="d_before_end_min" class="form-control" placeholder="от">
+                            {% else %}
+                                <input name="d_before_end_min" class="form-control" placeholder="от">
+                            {% endif %}
+                        </div>
+
+                        <div class="col-sm-3">
+                            {% if form_data.d_before_end_max != -1 %}
+                                <input value='{{ form_data.d_before_end_max }}' name="d_before_end_max" class="form-control" placeholder="до">
+                            {% else %}
+                                <input name="d_before_end_max" class="form-control" placeholder="до">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label  class="col-sm-4 col-form-label">Доходность</label>
+                        <div class="col-sm-3">
+                            {% if form_data.mat_yield_min != -1 %}
+                                <input value='{{ form_data.mat_yield_min }}' name="mat_yield_min" class="form-control" placeholder="от, %">
+                            {% else %}
+                                <input name="mat_yield_min" class="form-control" placeholder="от">
+                            {% endif %}
+                        </div>
+
+                        <div class="col-sm-3">
+                            {% if form_data.mat_yield_max != -1 %}
+                                <input value='{{ form_data.mat_yield_max }}' name="mat_yield_max" class="form-control" placeholder="от, %">
+                            {% else %}
+                                <input name="mat_yield_max" class="form-control" placeholder="до, %">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label  class="col-sm-4 col-form-label">Купон, ₽</label>
+                        <div class="col-sm-3">
+                            {% if form_data.coupon_size_min != -1 %}
+                                <input value='{{ form_data.coupon_size_min }}' name="coupon_size_min" class="form-control" placeholder="от">
+                            {% else %}
+                                <input name="coupon_size_min" class="form-control" placeholder="от">
+                            {% endif %}
+                        </div>
+
+                        <div class="col-sm-3">
+                            {% if form_data.coupon_size_max != -1 %}
+                                <input value='{{ form_data.coupon_size_max }}' name="coupon_size_max" class="form-control" placeholder="до">
+                            {% else %}
+                                <input name="coupon_size_max" class="form-control" placeholder="до">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label  class="col-sm-4 col-form-label">Цена, %</label>
+                        <div class="col-sm-3">
+                            {% if form_data.price_min != -1 %}
+                                <input value='{{ form_data.price_min }}' name="price_min" class="form-control" placeholder="от">
+                            {% else %}
+                                <input name="price_min" class="form-control" placeholder="от">
+                            {% endif %}
+                        </div>
+
+                        <div class="col-sm-3">
+                            {% if form_data.price_max != -1 %}
+                                <input value='{{ form_data.price_max }}' name="price_max" class="form-control" placeholder="до">
+                            {% else %}
+                                <input name="price_max" class="form-control" placeholder="до">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+
+                        <label  class="col-sm-4 col-form-label">Кредитный рейтинг</label>
+                        <div class="col-sm-3">
+                            <select name="credit_level_min" class="form-control">
+                                <option selected>{{ form_data.credit_level_min }} </option>
+                                <option>Не важен</option>
+                                <option>B-</option>
+                                <option>B</option>
+                                <option>B+</option>
+                                <option>BB</option>
+                                <option>BB+</option>
+                                <option>BBB-</option>
+                                <option>BBB</option>
+                                <option>BBB+</option>
+                                <option>A-</option>
+                                <option>A</option>
+                                <option>A+</option>
+                                <option>AA-</option>
+                                <option>AA</option>
+                                <option>AA+</option>
+                                <option>AAA</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label  class="col-sm-4 col-form-label">Ликвидность</label>
+                        <div class="col-sm-3">
+                            {% if form_data.liquidity_min != -1 %}
+                                <input value='{{ form_data.liquidity_min }}' name="liquidity_min" class="form-control" placeholder="от, шт">
+                            {% else %}
+                                <input name="liquidity_min" class="form-control" placeholder="от, сделок">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <br>
+        <div class="container">
+
+            {% if form_data.search_title != -1 %}
+                <input value='{{ form_data.search_title }}' name="search_title" class="form-control me-2" type="search" placeholder="Поиск облигаций по названию" aria-label="Search">
+
+            {% else %}
+                <input name="search_title" class="form-control me-2" type="search" placeholder="Поиск облигаций по названию" aria-label="Search">
+
+            {% endif %}
+            <br>
+        </div>
+        <div class="button-container">
+            <button class="btn btn-outline-success" type="submit">Искать</button>
+
+            <button id="reset-button" class="btn btn-outline-secondary" type="reset">Очистить</button>
+        </div>
+    </div>
+        <div class="main-item">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col">Доходность</th>
+                            <th scope="col" class="pc-only">Срок, дней</th>
+                            <th scope="col" class="pc-only">Купон</th>
+                            <th scope="col" class="pc-only">Объём выпуска</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bond in bonds %}
+                            <tr>
+                                <td>
+                                    <a target="_blank" class="item-link" style="display: block;" href="{% url 'bond' bond.isin %}">
+                                        {{ bond.title }}
+                                    </a>
+
+                                </td>
+                                <td>{{ bond.yield_to_maturity }}%</td>
+                                <td class="pc-only">{% get_time bond %}</td>
+                                <td class="pc-only">{{ bond.coupon.size }}{% get_currency bond %}</td>
+                                <td class="pc-only">{% get_issue_volume bond %} </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="pag">
+                <ul class="pagination">
+                    {% if bonds.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"  onclick="window.location='{% url 'bond_screener' %}?'+window.location.search+'&page={{ bonds.previous_page_number }}';" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link"  onclick="window.location='{% url 'bond_screener' %}?'+window.location.search+'&page={{ bonds.previous_page_number }}';">{{ bonds.previous_page_number }}</a></li>
+                    {% endif %}
+
+
+                    <li class="page-item"><a class="page-link active" onclick="window.location='{% url 'bond_screener' %}?'+window.location.search+'&page={{ bonds.number }}';" >{{ bonds.number }}</a></li>
+
+                    {% if bonds.has_next %}
+                        <li class="page-item"><a class="page-link" onclick="window.location='{% url 'bond_screener' %}?'+window.location.search+'&page={{ bonds.next_page_number }}';">{{ bonds.next_page_number }}</a></li>
+                        <li class="page-item">
+                            <a class="page-link" onclick="window.location='{% url 'bond_screener' %}?'+window.location.search+'&page={{ bonds.next_page_number }}';" aria-label="Previous">
+                                <span aria-hidden="true">&raquo;</span>
+
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </form>
+    <script>
+
+        let form = document.getElementById('main_form');
+        let button = document.getElementById('reset-button');
+
+        button.addEventListener('click', () => form.reset());
+        var win_wigth = window.screen.width;
+
+
+        if (win_wigth < 900) {
+            const collection = document.getElementsByClassName("pc-only");
+
+            while(collection.length) {
+                collection[0].remove();
+            }
+        }
+    </script>
+</div>
+{% endblock %}

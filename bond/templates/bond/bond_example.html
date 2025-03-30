@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавленние фин. файла
+{% endblock %}
+
+
+{% block content %}
+{% if request.user.is_authenticated %}
+    <h1>isin Облигации: {{ bond.isin }}</h1>
+    <h1>название облигации: {{bond.title }}</h1>
+
+{% endif %}
+{% endblock %}

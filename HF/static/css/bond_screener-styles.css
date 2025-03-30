@@ -1,0 +1,74 @@
+.main {
+    padding: 2% 10%;
+    background: #F8F9FA;
+}
+
+.main-item {
+    padding: 2% 5%;
+    margin: 20px 0;
+    background: #FFFFFF;
+    border-radius: 20px;
+}
+
+.item-link {
+    text-decoration: none;
+    color: black;
+}
+
+.table {
+    margin-top: 30px;
+}
+
+.line {
+    line-height: 35px;
+}
+
+.cr-item-1 {
+
+    margin: 0 20%;
+    height: 120%;
+    border-radius: 15px;
+}
+
+.cr-item-2 {
+    
+    margin: 0 30%;
+    height: 120%;
+    border-radius: 15px;
+}
+
+.level-0 {
+    background: #ECECEC;
+    color: black;
+}
+
+.level-1 {
+    background: #AD033B;
+    color: white;
+}
+
+.level-2 {
+    background: #EC989D;
+    color: black;
+}
+
+.level-3 {
+    background: #CCDFF1;
+    color: black;
+}
+
+.level-4 {
+    background: #C5EFDD;
+    color: black;
+}
+
+.level-5 {
+    background: #3EAF86;
+    color: white;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+

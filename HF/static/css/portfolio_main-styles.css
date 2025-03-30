@@ -1,0 +1,15 @@
+
+.cr-item-3 {
+
+    padding: 0 10%;
+    margin: 0 5%;
+    border-radius: 15px;
+}
+
+.hide-class {
+    display: none;
+}
+
+.past-date {
+    background: #B4E197;
+}

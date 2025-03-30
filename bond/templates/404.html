@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load bond_tags %}
+{% load static %}
+
+{% block title %}
+Скринер облигаций
+{% endblock %}
+
+{% block addstatic %}
+	<link rel="stylesheet" href="{% static 'css/index-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+	<div class="page">
+		<div class="d-flex align-items-center justify-content-center vh-100">
+            <div class="text-center">
+                <h1 class="display-1 fw-bold">404</h1>
+                <p class="fs-3"> Страница не найдена</p>
+                <p class="lead">
+                    Данная страница не существует.
+                  </p>
+                <a type="button" class="btn btn-outline-success btn-lg px-4 gap-3" href="{% url 'bond_screener' %}">Скринер</a>
+
+            </div>
+        </div>
+	</div>
+
+{% endblock %}

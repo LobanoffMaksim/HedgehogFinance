@@ -1,0 +1,664 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bond_tags %}
+{% load report_tags %}
+{% load text_tags %}
+{% load score_tags %}
+{% load cache %}
+
+{% block title %}
+Обзор облигации
+{% endblock %}
+
+
+{% block addstatic %}
+<link rel="stylesheet" href="{% static 'css/bond_view-styles.css' %}">
+<link rel="stylesheet" href="{% static 'js/bond_view_js.js' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container-fluid bond-header">
+        <div class="row">
+            <div class="col-md-3 bond-header-item">
+                <h5 style="width=100%">{{ bond.title }}</h5>
+                <span class="bond-isin">ISIN: {{ bond.isin}}</span>
+            </div>
+            <div class="col-md-2 bond-header-item">
+                <h3 style="width=100%">{{ bond.price }}% </h3>
+                <span class="bond-isin">Цена от номинала</span>
+            </div>
+            <div class="col-md-2 bond-header-item">
+                <h3 style="width=100%">{{ bond.yield_to_maturity }}% </h3>
+                <span class="bond-isin">Доходность</span>
+            </div>
+            <div class="col-md-2 bond-header-item">
+                <h3 style="width=100%">{{ bond.maturity_date|date:"Y-m-d" }}</h3>
+                <span class="bond-isin">Погашение</span>
+            </div>
+            <div class="col-md-3">
+                <h5 style="width=50%">{{ bond.emitter.title }}</h5>
+                <span class="bond-isin">Реальный заёмщик </span>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid bond-main">
+        <div class="row">
+            <div class="col-md-3" style="margin-top: 40px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item li-1">Об облигации</li>
+                    {% if emitter_info_exists > 0 %}
+                    <li class="list-group-item li-2">Об эмитенте</li>
+                    {% endif %}
+                    <li class="list-group-item li-3">Календарь</li>
+                    {% if emitter_info_exists > 1 %}
+                    <li class="list-group-item li-4">Выручка и прибыль</li>
+                    <li class="list-group-item li-5">Маржинальность</li>
+                    <li class="list-group-item li-6">Финансовое здоровье</li>
+                    <li class="list-group-item li-7">Ликвидность</li>
+                    {% endif %}
+                </ul>
+                <br/>
+                {% get_ifrs_exists bond report_type as ifrs %}
+                {% if ifrs %}
+                <div class="btn-msfo">
+                    <a href="..{% get_ifrs_link bond %}" type="button" class="btn btn-outline-secondary btn-lg form-control">Перейти к МСФО</a>
+                </div>
+                {% endif %}
+            </div>
+            {% get_cache_name bond.emitter report_type as cache_name %}
+
+            <div class="col-md-9" style="margin-top: 40px">
+                <div class="bond-about">
+                    <h3 class="block-header">Об облигации</h3>
+                    <br>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 bond-about-release">
+                                <div class="bond-about-header">Выпуск</div>
+                                <div class="bond-about-item">
+                                    <span>ISIN код</span>
+                                    <span>{{ bond.isin }} </span>
+                                </div>
+                                <div class="bond-about-item">
+                                    <span>Текущий номинал</span>
+                                    <span>{{ bond.facevalue }}{% get_currency bond %}</span>
+                                </div>
+                                <div class="bond-about-item">
+                                    <span>Объем выпуска</span>
+                                    <span>{% get_issue_volume bond %} </span>
+                                </div>
+                                <div class="bond-about-item">
+                                    <span>Дней до погашения</span>
+                                    <span>{% get_time bond %} </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 bond-about-release">
+                                <div class="bond-about-header">Спецификация</div>
+                                <div class="bond-about-item">
+                                    <span>Купон</span>
+                                    <span>{{ bond.coupon.size }} {% get_currency bond%} </span>
+                                </div>
+                                <div class="bond-about-item">
+                                    <span>Оферта</span>
+                                    {% get_offer_exist bond as offer %}
+
+                                    {% if offer %}
+                                        <span>{% get_offer bond %}</span>
+                                    {% else %}
+                                        <span>Нет</span>
+                                    {% endif %}
+                                </div>
+                                <div class="bond-about-item">
+                                    <span>Амортизация</span>
+                                    {% get_amortization_exist bond as amortization %}
+                                    {% if amortization %}
+                                        <span>Да</span>
+                                    {% else %}
+                                        <span>Нет</span>
+                                    {% endif %}
+                                </div>
+                                <div class="bond-about-item">
+                                    <span>Отрасль</span>
+                                    <span>{{ bond.emitter.sector.title }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% if emitter_info_exists > 0 %}
+                <div class="emitter-about">
+                    <div class="container-fluid">
+                        <div class="row">
+                            {% if cr_size >= 2 %}
+                            <div class="col-md-8 align-middle">
+                                <h5 class="align-middle">{{ bond.emitter.title }}</h5>
+                            </div>
+                            {% else %}
+                            <div class="col-md-10 ">
+                                <h5 class="align-middle">{{ bond.emitter.title }}</h5>
+                            </div>
+                            {% endif %}
+
+                            {% if cr_size > 0 %}
+                            <div class="col-md-2  debt-rating-item">
+                                <div style="width=100%" class="debt-agent">
+                                    <span>{{ cr.0.0 }}</span>
+                                </div>
+                                <span style="width=100%">
+                                    {{ cr.0.1 }}
+
+                                </span>
+                            </div>
+                            {% endif %}
+                            {% if cr_size > 1 %}
+                            <div class="col-md-2 debt-rating-item">
+                                <div style="width=100%" class="debt-agent">
+                                    <span>{{ cr.1.0 }}</span>
+                                </div>
+                                <span style="width=100%">
+                                    {{ cr.1.1 }}
+
+                                </span>
+                            </div>
+                            {% endif %}
+                            {% comment %}
+                            <div class="col-md-2 emitter-about-item">
+                                <div style="width=100%">
+                                    <strong>Сайт</strong>
+                                </div>
+                                <span style="width=100%">
+                                    <a href="{{ bond.emitter.website1 }}" target="_blank">ссылка</a>
+
+                                </span>
+                            </div>
+                            <div class="col-md-3 emitter-about-item">
+                                <div style="width=100%">
+                                    <strong>Сектор</strong>
+                                </div>
+                                <span style="width=100%">
+                                    {{ bond.emitter.sector.title }}
+                                </span>
+                            </div>
+                            {% endcomment %}
+                        </div>
+                    </div>
+                    {% comment %}
+                    <div class="debt-rating">
+                        <div class="container-fluid">
+                            <div class="row">
+
+                                 <div class="col-md-3 debt-rating-item">
+                                     <div style="width=100%" class="debt-agent">ЭКСПЕРТ</div>
+                                     {% if bond.emitter.ra_expert is not None %}
+                                        <span style="width=100%">{{ bond.emitter.ra_expert }}</span>
+                                     {% else %}
+                                        <span style="width=100%">---</span>
+                                     {% endif %}
+                                </div>
+                                <div class="col-md-3 debt-rating-item">
+                                     <div style="width=100%" class="debt-agent">FITCH</div>
+                                     {% if bond.emitter.fitch is not None %}
+                                        <span style="width=100%">{{ bond.emitter.fitch }}</span>
+                                     {% else %}
+                                        <span style="width=100%">---</span>
+                                     {% endif %}
+                                </div>
+                                <div class="col-md-3 debt-rating-item">
+                                     <div style="width=100%" class="debt-agent">АКРА</div>
+                                     {% if bond.emitter.akra is not None %}
+                                        <span style="width=100%">
+                                            {{ bond.emitter.akra }}
+                                        </span>
+                                     {% else %}
+                                        <span style="width=100%">---</span>
+                                     {% endif %}
+                                </div>
+                                <div class="col-md-3 debt-rating-item">
+                                     <div style="width=100%" class="debt-agent">S&P</div>
+                                     {% if bond.emitter.sp is not None %}
+                                        <span style="width=100%">
+                                            {{ bond.emitter.sp }}
+                                        </span>
+                                     {% else %}
+                                        <span style="width=100%">---</span>
+                                     {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endcomment %}
+                    <div class="emitter-description">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    {{ bond.emitter.description }}
+
+
+                                    {% if bond.emitter.is_system_important %}
+                                        <p>
+                                            <strong>
+                                                Эмитент является системообразующим предприятием РФ
+                                            </strong>
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    {% get_credit_rating_text bond.emitter report_type as rating %}
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=rating.0 comment_type="first" %}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                {% endif %}
+                <div class="payments-list">
+                    <h3>Выплаты</h3>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Тип выплаты</th>
+                                <th scope="col">Дата выплаты</th>
+                                <th scope="col">Размер выплаты</th>
+                                <th scope="col" class="pc-only">Ставка от номинала</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% get_payments bond as payments %}
+                            {% get_zero as cnt %}
+                            {% for p in payments %}
+                                {% get_pasted_date p as flag %}
+                                {% if flag %}
+                                    <tr class="past-date">
+                                        <td>{{ p.type.title }}</td>
+                                        <td>{{ p.date|date:"Y-m-d" }}</td>
+                                        {% if p.size != 0 %}
+                                            <td>{{ p.size }} {% get_currency bond %}</td>
+                                        {% else %}
+                                            <td>---</td>
+                                        {% endif %}
+                                        {% if p.relative_size != 0 %}
+                                            <td class="pc-only">{{ p.relative_size }}%</td>
+                                        {% else %}
+                                            <td class="pc-only">---</td>
+                                        {% endif %}
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td>{{ p.type.title }}</td>
+                                        <td>{{ p.date|date:"Y-m-d" }}</td>
+                                        {% if p.size != 0 %}
+                                            <td>{{ p.size }} {% get_currency bond %}</td>
+                                        {% else %}
+                                            <td>---</td>
+                                        {% endif %}
+                                        {% if p.relative_size != 0 %}
+                                            <td class="pc-only">{{ p.relative_size }}%</td>
+                                        {% else %}
+                                            <td class="pc-only">---</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                {% if emitter_info_exists > 1 %}
+                <div class="revenue-income">
+                    <h3>Выручка и прибыль</h3>
+                    <canvas class="revenue-chart" id="RevenueChart" style="position: relative;" ></canvas>
+
+                    <script>
+                        if (window.screen.width < 900) {
+                            var RevenueChartElement = document.getElementById("RevenueChart");
+                            RevenueChartElement.height = "200";
+                        }
+                    </script>
+                    {% get_income_revenue_text bond.emitter report_type as  r_text %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=r_text.0 comment_type="first" %}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=r_text.1 comment_type="last" %}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                 <h4>Рост выручки</h4>
+                                <canvas id="RevenueGrowthChart" height="200px"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                 <h4>Рост прибыли</h4>
+                                <canvas id="IncomeGrowthChart" height="200px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% get_cagr_text bond.emitter report_type as  cagr_text %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=cagr_text.0 comment_type="first" %}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=cagr_text.1 comment_type="last" %}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="margin-data">
+                    <h3>Маржинальность</h3>
+                    <canvas class="revenue-chart" id="MarginChart" style="position: relative;"></canvas>
+
+                    <script>
+                        if (window.screen.width < 900) {
+                            var MarginChartElement = document.getElementById("MarginChart");
+
+                            MarginChartElement.height = "250";
+                        }
+                    </script>
+                    {% get_margin_text bond.emitter report_type as  m_text %}
+
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=m_text.0 comment_type="first" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=m_text.1 comment_type="last" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Рентабельность</h3>
+
+                    <canvas class="revenue-chart" id="ProfitabilityChart" style="position: relative;"></canvas>
+
+                    <script>
+                        if (window.screen.width < 900) {
+                            var ProfitabilityChartElement = document.getElementById("ProfitabilityChart");
+
+                            ProfitabilityChartElement.height = "250";
+                        }
+                    </script>
+                    {% get_profitability_text bond.emitter report_type as  p_text %}
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=p_text.0 comment_type="first" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=p_text.1 comment_type="last" %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="finance-health">
+                    <h3>Финансовое здоровье</h3>
+                    <canvas class="revenue-chart" id="AssetsLiabilitiesChart"></canvas>
+
+                    <script>
+                        if (window.screen.width < 900) {
+                            var AssetsLiabilitiesChartElement = document.getElementById("AssetsLiabilitiesChart");
+
+                            AssetsLiabilitiesChartElement.height = "250";
+                        }
+                    </script>
+                    {% get_assets_liabilities_text bond.emitter report_type as l_text %}
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=l_text.0 comment_type="first" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=l_text.1 comment_type="last" %}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <canvas class="revenue-chart" id="DebtEbitdaChart" style="position: relative;"></canvas>
+
+                    <script>
+
+                        if (window.screen.width < 900) {
+                            var DebtEbitdaChartElement = document.getElementById("DebtEbitdaChart");
+
+                            DebtEbitdaChartElement.height = "250";
+                        }
+                    </script>
+                    {% get_debt_ebitda_text bond.emitter report_type as  d_text %}
+
+
+
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=d_text.0 comment_type="first" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=d_text.1 comment_type="last" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {% if bond.emitter.sector.title != 'Фин.сервис - Лизинг' %}
+                                <h3 style="text-align: center">Чистый долг / EBITDA</h3>
+                                {% else %}
+                                <h4 style="text-align: center">Уровень покрытия долга</h4>
+                                {% endif %}
+                                <div id="amchartdiv1"></div>
+                            </div>
+                            <div class="col-md-6">
+                                {% if bond.emitter.sector.title != 'Фин.сервис - Лизинг' %}
+                                <h3 style="text-align: center">Уплаченные проценты / EBITDA</h3>
+                                {% else %}
+                                <h4 style="text-align: center">Уровень собственного капитала</h4>
+                                {% endif%}
+                                <div id="amchartdiv2"></div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    {% get_debt_level_text bond.emitter report_type as  dl_text %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=dl_text.0 comment_type="first last" %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="liquidity">
+                    <h3>Ликвидность</h3>
+                    <canvas id="LiquidityChart" ></canvas>
+                    <script>
+
+                        if (window.screen.width < 900) {
+                            var LiquidityChartElement = document.getElementById("LiquidityChart");
+
+                            LiquidityChartElement.height = "250";
+                        }
+                    </script>
+
+                    {% get_liquidity_text bond.emitter report_type as  li_text %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=li_text.0 comment_type="first" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=li_text.1 comment_type="" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include "inc/_comment.html" with comment_data=li_text.2 comment_type="last" %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="container-fliud" style="margin-top: 60px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 style="text-align: center">Структура EBITDA</h3>
+                                <div id="amchartdiv3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if emitter_info_exists > 1 %}
+
+                {% get_revenue_data bond.emitter report_type as data %}
+                {% get_revenue_cagr bond.emitter report_type as data2 %}
+                {% get_income_cagr bond.emitter report_type as data3 %}
+                {% get_margin bond.emitter report_type as data4 %}
+                {% get_profitability bond.emitter report_type as data5 %}
+                {% get_assets_and_liabilities bond.emitter report_type as data6 %}
+                {% get_liquidity bond.emitter report_type as data7 %}
+                {% get_ebitda bond.emitter report_type as data8 %}
+                {% get_net_debt_ebitda bond.emitter report_type as data9 %}
+                {% get_leasing_debt_data bond.emitter report_type as data10 %}
+                {% get_interest_to_ebitda bond.emitter report_type as data21 %}
+                <script>
+                    var screen_width = window.screen.width;
+                    var revenue_y_label = '{{ data.0 }}';
+                    var revenue_x_labels = {{ data.1|safe }};
+                    var revenue_data = {{ data.2|safe }};
+                    var net_profit_data = {{ data.3|safe }};
+                    var operation_profit_data = {{ data.4|safe }};
+                    var ebitda_data = {{ data.5|safe }};
+                    var net_debt_data = {{ data.12|safe }};
+                    var equity_data = {{ data.7|safe }};
+                    var assets2_data = {{ data.6|safe }};
+                    var cagr_revenue_data = {{ data2|safe }};
+                    var cagr_income_data = {{ data3|safe }};
+                    var margin_income_data = {{ data4.0|safe }};
+                    var margin_operation_data = {{ data4.1|safe }};
+                    var margin_ebitda_data = {{ data4.2|safe }};
+                    var roa_data = {{ data5.0|safe }};
+                    var roe_data = {{ data5.1|safe }};
+                    var assets_data = {{ data6.0|safe }};
+                    var liabilities_data = {{ data6.1|safe }};
+                    var NDtoEBITDA = {{ data9.0|safe }};
+                    var NDtoEquity = {{ data9.1|safe }};
+                    var DebtCoverage = {{ data10.0|safe }};
+                    var EquityLevel = {{ data10.1|safe }};
+                    var liquidity_data = {{ data7|safe }};
+                    var ebitda2_data = {{ data8|safe }};
+                    var interest_to_ebitda = {{ data21|safe }};
+                </script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+                <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+                <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+                <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
+                <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+                <script src="//cdn.amcharts.com/lib/5/themes/Micro.js"></script>
+                <script src="https://cdn.amcharts.com/lib/5/plugins/sliceGrouper.js"></script>
+
+                <script src="{% static 'js/bond_view_js.js' %}"></script>
+                {% if bond.emitter.sector.title != 'Фин.сервис - Лизинг' %}
+                    <script src="{% static 'js/bond_view_amcharts.js' %}"></script>
+                {% else %}
+                    <script src="{% static 'js/bond_view_amcharts_leasing.js' %}"></script>
+                {% endif %}
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <script>
+            var win_wigth = window.screen.width;
+
+            if (win_wigth < 900) {
+                const collection = document.getElementsByClassName("pc-only");
+
+                while(collection.length) {
+                    collection[0].remove();
+                }
+            }
+        </script>
+    </div>
+
+{% endblock %}

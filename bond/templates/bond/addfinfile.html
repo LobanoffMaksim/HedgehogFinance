@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавленние фин. файла
+{% endblock %}
+
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Последние выполненые эмитенты</h3>
+        </div>
+        <div class="col-md-9">
+            <form action="{% url 'add_finfile' %}" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
